@@ -65,6 +65,13 @@ public class Snake : SnakePart
 
         if (dir != direction)
         {
+            if(changedDirection)
+            {
+                bufferDirection = dir;
+                dir = direction;
+                useBuffer = false;
+            }
+
             changedDirection = true;
 
             var willNow = WillHit(dir);
