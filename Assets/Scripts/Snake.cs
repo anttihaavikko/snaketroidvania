@@ -27,6 +27,7 @@ public class Snake : SnakePart
     private bool frozen;
     private bool stopped;
     private bool canStop;
+    private bool canTeleport = true;
 
     // Start is called before the first frame update
     void Start()
@@ -163,7 +164,7 @@ public class Snake : SnakePart
 
         if ((!willCollide || wasSaveUsed) && !CheckCollisions())
         {
-            if(willCollide && !immortal)
+            if(willCollide && !immortal && !canTeleport)
             {
                 Move(transform.position + direction * 0.25f);
                 Invoke("Respawn", 0.2f);
@@ -215,8 +216,15 @@ public class Snake : SnakePart
                 var part = h.GetComponent<SnakePart>();
                 if(part.HasMoved())
                 {
-                    Respawn();
-                    returnValue = true;
+                    if(canTeleport)
+                    {
+                        transform.position += direction * 1;
+                    }
+                    else
+                    {
+                        Respawn();
+                        returnValue = true;
+                    }
                 }
             }
 
