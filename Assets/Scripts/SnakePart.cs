@@ -12,11 +12,15 @@ public class SnakePart : MonoBehaviour
     protected SnakePart tail;
     protected Vector3 moveDirection;
 
+    private bool hasMoved;
+
     public void Move(Vector3 pos)
     {
         moveDirection = pos - transform.position;
         Tweener.Instance.MoveTo(transform, pos, 0.12f, 0, TweenEasings.LinearInterpolation);
         //transform.position = pos;
+
+        hasMoved = moveDirection.magnitude > 0.5f;
 
         if (tail)
         {
@@ -29,9 +33,15 @@ public class SnakePart : MonoBehaviour
         }
     }
 
+    public bool HasMoved()
+    {
+        return hasMoved;
+    }
+
     public void Reset(Vector3 pos)
     {
         transform.position = pos;
+        hasMoved = false;
 
         if (mid)
             mid.position = pos;

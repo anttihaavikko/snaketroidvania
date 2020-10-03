@@ -21565,6 +21565,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 4155332820028206359, guid: f86a7c35f9aca4dedb97e7053674a483,
+        type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4155332820028206357, guid: f86a7c35f9aca4dedb97e7053674a483, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f86a7c35f9aca4dedb97e7053674a483, type: 3}
@@ -21599,7 +21604,7 @@ MonoBehaviour:
     type: 3}
   collisionMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 1025
   camRig: {fileID: 1970753754}
   currentRoom: {fileID: 0}
 --- !u!4 &958057234 stripped

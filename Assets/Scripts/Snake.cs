@@ -29,7 +29,7 @@ public class Snake : SnakePart
     void Start()
     {
         index = 1;
-        partPool = new PartPool();
+        partPool = gameObject.AddComponent<PartPool>();
         partPool.SetPrefab(tailPrefab);
         switches = new List<DoorSwitch>();
 
@@ -167,7 +167,7 @@ public class Snake : SnakePart
     bool WillHit(Vector3 dir)
     {
         var hits = Physics2D.OverlapCircleAll(transform.position + dir, 0.25f, collisionMask);
-        return hits.Any(h => h.gameObject.tag == "Wall");
+        return hits.Any(h => h.gameObject.tag == "Wall" || h.gameObject.tag == "Tail");
     }
 
     bool CheckCollisions()
@@ -182,6 +182,16 @@ public class Snake : SnakePart
 
         foreach (var h in hits)
         {
+            if (h.tag == "Tail")
+            {
+                var part = h.GetComponent<SnakePart>();
+                if(part.HasMoved())
+                {
+                    Respawn();
+                    returnValue = true;
+                }
+            }
+
             if (h.tag == "Wall")
             {
                 if(!immortal)
@@ -225,7 +235,11 @@ public class Snake : SnakePart
                     Invoke("StartMove", 0.7f);
                 }
 
-                spawnPos = transform.position;
+                spawnPos = new Vector3(
+                    Mathf.Round(transform.position.x),
+                    Mathf.Round(transform.position.y),
+                    Mathf.Round(transform.position.z)
+                );
                 spawnDir = direction;
                 spawnLength = length;
                 currentRoom = h.GetComponent<Room>();
