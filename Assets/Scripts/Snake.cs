@@ -19,6 +19,8 @@ public class Snake : SnakePart
     private bool immortal;
     private int length = 1;
     private List<DoorSwitch> switches;
+    private bool willReverse;
+    private bool hasReleasedSinceReverse = true;
 
     // Start is called before the first frame update
     void Start()
@@ -47,18 +49,47 @@ public class Snake : SnakePart
         else if (iy > treshold) dir = Vector3.up;
         else if (iy < -treshold) dir = Vector3.down;
 
+        var inp = new Vector3(ix, iy, 0);
+        if (inp.magnitude < treshold)
+        {
+            hasReleasedSinceReverse = true;
+        }
+
+        if (!hasReleasedSinceReverse)
+            return;
+
         if (dir != -direction)
             direction = dir;
+        else
+            willReverse = true;
 
-        if(Application.isEditor && Input.GetKeyDown(KeyCode.R))
+        if (Application.isEditor && Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadSceneAsync("Main");
         }
     }
 
+    void Reverse()
+    {
+        direction = GetReverseDirection();
+        transform.position = GetReverseSpot();
+        willReverse = false;
+        var oldTail = tail;
+        tail = GetEnd();
+        oldTail.ReverseOrder(null);
+        hasReleasedSinceReverse = false;
+        RepositionMids();
+    }
+
     void StartMove()
     {
-        Invoke("StartMove", 0.2f);
+        Invoke("StartMove", willReverse ? 0.4f : 0.2f);
+
+        if (willReverse)
+        {
+            Reverse();
+        }
+
         if(!CheckCollisions())
         {
             Move(transform.position + direction);
