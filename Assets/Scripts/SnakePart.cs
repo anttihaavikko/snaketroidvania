@@ -12,25 +12,29 @@ public class SnakePart : MonoBehaviour
     protected SnakePart tail;
     protected Vector3 moveDirection;
 
+    //private Vector3 target, tailTarget;
     private bool hasMoved;
+    private readonly float moveDuration = 0.12f;
 
-    public void Move(Vector3 pos)
+    public Vector3 Move(Vector3 pos)
     {
         moveDirection = pos - transform.position;
-        Tweener.Instance.MoveTo(transform, RoundVector(pos), 0.12f, 0, TweenEasings.LinearInterpolation);
-        //transform.position = pos;
+        Tweener.Instance.MoveTo(transform, RoundVector(pos), moveDuration, 0, TweenEasings.LinearInterpolation);
 
         hasMoved = moveDirection.magnitude > 0.5f;
 
         if (tail)
         {
-            tail.Move(transform.position);
-
-            if(mid)
-            {
-                Tweener.Instance.MoveTo(mid, (transform.position + pos) * 0.5f, 0.12f, 0, TweenEasings.LinearInterpolation);
-            }
+            var tp = tail.Move(transform.position);
+            var sum = RoundVector(pos + tp);
+            Tweener.Instance.MoveTo(mid, sum * 0.5f, moveDuration, 0, TweenEasings.LinearInterpolation);
         }
+        else
+        {
+            Tweener.Instance.MoveTo(mid, pos, moveDuration, 0, TweenEasings.LinearInterpolation);
+        }
+
+        return RoundVector(pos);
     }
 
     public bool HasMoved()
@@ -55,14 +59,14 @@ public class SnakePart : MonoBehaviour
         if(tail)
         {
             tail.Attach(part);
-        } else
+        }
+        else
         {
             part.transform.position = transform.position;
             tail = part;
             tail.index = index + 1;
             mid.parent = transform.parent;
             part.moveDirection = moveDirection;
-            mid.gameObject.SetActive(true);
         }
     }
 
@@ -118,13 +122,9 @@ public class SnakePart : MonoBehaviour
     {
         if (tail)
         {
-            mid.gameObject.SetActive(true);
             mid.position = (transform.position + tail.transform.position) * 0.5f;
             tail.RepositionMids();
-            return;
         }
-            
-        mid.gameObject.SetActive(false);
     }
 
     public void Reindex(int prev)
