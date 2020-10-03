@@ -12,6 +12,7 @@ public class SnakePart : MonoBehaviour
     public void Move(Vector3 pos)
     {
         Tweener.Instance.MoveTo(transform, pos, 0.1f, 0, TweenEasings.LinearInterpolation);
+        //transform.position = pos;
 
         if (tail)
         {
@@ -22,6 +23,17 @@ public class SnakePart : MonoBehaviour
                 Tweener.Instance.MoveTo(mid, (pos + transform.position) * 0.5f, 0.1f, 0, TweenEasings.LinearInterpolation);
             }
         }
+    }
+
+    public void Reset(Vector3 pos)
+    {
+        transform.position = pos;
+
+        if (mid)
+            mid.position = pos;
+
+        if(tail)
+            tail.Reset(pos);
     }
 
     public void Attach(SnakePart part)

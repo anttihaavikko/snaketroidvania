@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Pickup
   - Room
+  - Wall
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,10 @@ public class Snake : SnakePart
 
     private Vector3 direction = Vector3.right;
 
+    private Vector3 spawnPos;
+    private Vector3 spawnDir;
+    private int allowedHits = 3;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +23,7 @@ public class Snake : SnakePart
         AddTail();
         AddTail();
 
-        Invoke("StartMove", 0.1f);
+        Invoke("StartMove", 0.5f);
     }
 
     // Update is called once per frame
@@ -41,9 +45,11 @@ public class Snake : SnakePart
 
     void StartMove()
     {
-        Move(transform.position + direction);
-        Invoke("CheckCollisions", 0.1f);
         Invoke("StartMove", 0.2f);
+        if(!CheckCollisions())
+        {
+            Move(transform.position + direction);
+        }
     }
 
     void AddTail()
@@ -52,14 +58,26 @@ public class Snake : SnakePart
         Attach(part);
     }
 
-    void CheckCollisions()
+    bool CheckCollisions()
     {
         var hits = Physics2D.OverlapCircleAll(transform.position, 0.25f, collisionMask);
         //print(string.Join(",", hits.Select(h => h.name)));
 
-        foreach(var h in hits)
+        foreach (var h in hits)
         {
-            if(h.tag == "Pickup")
+            if (h.tag == "Wall")
+            {
+                if(allowedHits > 0)
+                {
+                    allowedHits--;
+                    return false;
+                }
+
+                Respawn();
+                return true;
+            }
+
+            if (h.tag == "Pickup")
             {
                 var x = Random.Range(-5, 6);
                 var y = Random.Range(-4, 5);
@@ -70,9 +88,22 @@ public class Snake : SnakePart
 
             if(h.tag == "Room" && (!currentRoom || h.transform != currentRoom.transform))
 			{
+                spawnPos = transform.position;
+                spawnDir = direction;
                 currentRoom = h.GetComponent<Room>();
                 Tweener.Instance.MoveTo(camRig, h.transform.position, 0.3f, 0, TweenEasings.BounceEaseOut);
 			}
         }
+
+
+        return false;
+    }
+
+    void Respawn()
+    {
+        CancelInvoke("StartMove");
+        Invoke("StartMove", 0.7f);
+        direction = spawnDir;
+        Reset(spawnPos);
     }
 }
