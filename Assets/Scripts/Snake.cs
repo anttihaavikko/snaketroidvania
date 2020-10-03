@@ -15,12 +15,15 @@ public class Snake : SnakePart
 
     private Vector3 spawnPos;
     private Vector3 spawnDir;
+    private int spawnLength;
     private int allowedHits;
     private int length = 1;
 
     // Start is called before the first frame update
     void Start()
     {
+        index = 1;
+
         AddTail();
         AddTail();
 
@@ -112,9 +115,12 @@ public class Snake : SnakePart
 
             if(!insideWall && h.tag == "Room" && (!currentRoom || h.transform != currentRoom.transform))
 			{
-                //print("Activate room");
+                if(currentRoom)
+                    currentRoom.MarkDone();
+
                 spawnPos = transform.position;
                 spawnDir = direction;
+                spawnLength = length;
                 currentRoom = h.GetComponent<Room>();
                 Tweener.Instance.MoveTo(camRig, h.transform.position, 0.3f, 0, TweenEasings.BounceEaseOut);
 			}
@@ -129,6 +135,8 @@ public class Snake : SnakePart
         CancelInvoke("StartMove");
         Invoke("StartMove", 0.7f);
         direction = spawnDir;
+        length = spawnLength;
+        Chop(length);
         Reset(spawnPos);
         currentRoom.Reset();
     }

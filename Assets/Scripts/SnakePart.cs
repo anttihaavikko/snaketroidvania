@@ -6,6 +6,7 @@ using System.Linq;
 public class SnakePart : MonoBehaviour
 {
     public Transform mid;
+    public int index;
 
     private SnakePart tail;
 
@@ -45,6 +46,16 @@ public class SnakePart : MonoBehaviour
         {
             part.transform.position = transform.position;
             tail = part;
+            tail.index = index + 1;
         }
+    }
+
+    public void Chop(int len)
+    {
+        if (tail)
+            tail.Chop(len);
+
+        if (len < index)
+            Destroy(gameObject);
     }
 }

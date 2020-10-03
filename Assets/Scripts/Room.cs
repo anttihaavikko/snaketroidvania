@@ -18,7 +18,7 @@ public class Room : MonoBehaviour
         grabbed.Add(go);
     }
 
-    public void RoomDone()
+    public void MarkDone()
     {
         grabbed.Clear();
     }
