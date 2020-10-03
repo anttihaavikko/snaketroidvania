@@ -10,6 +10,7 @@ public class Snake : SnakePart
     public LayerMask collisionMask;
 	public Transform camRig;
     public Room currentRoom;
+    public GameObject map;
 
     private Vector3 direction = Vector3.right;
 
@@ -28,6 +29,8 @@ public class Snake : SnakePart
     private bool stopped;
     private bool canStop;
     private bool canTeleport = true;
+    private bool showingMap;
+    private bool paused;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +51,11 @@ public class Snake : SnakePart
     {
         if (frozen)
             return;
+
+        if(Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.M))
+        {
+            ToggleMap();
+        }
 
         var treshold = 0.25f;
         var ix = Input.GetAxisRaw("Horizontal");
@@ -124,6 +132,27 @@ public class Snake : SnakePart
         {
             SceneManager.LoadSceneAsync("Main");
         }
+    }
+
+    void TogglePause(bool state)
+    {
+        paused = state;
+
+        if(paused)
+        {
+            CancelInvoke("StartMove");
+        }
+        else
+        {
+            Invoke("StartMove", 0.2f);
+        }
+    }
+
+    void ToggleMap()
+    {
+        showingMap = !showingMap;
+        map.SetActive(showingMap);
+        TogglePause(showingMap);
     }
 
     void Reverse()
