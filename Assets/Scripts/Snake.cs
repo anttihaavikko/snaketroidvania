@@ -21,6 +21,8 @@ public class Snake : SnakePart
     private List<DoorSwitch> switches;
     private bool willReverse;
     private bool hasReleasedSinceReverse = true;
+    private bool changedDirection;
+    private bool saveUsed;
 
     // Start is called before the first frame update
     void Start()
@@ -58,6 +60,9 @@ public class Snake : SnakePart
         if (!hasReleasedSinceReverse)
             return;
 
+        if (dir != direction)
+            changedDirection = true;
+
         if (dir != -direction)
             direction = dir;
         else
@@ -84,18 +89,37 @@ public class Snake : SnakePart
 
     void StartMove()
     {
-        Invoke("StartMove", willReverse ? 0.4f : 0.2f);
+        var willCollide = false;
 
         if (willReverse)
         {
             Reverse();
         }
 
-        if(!CheckCollisions())
+        var wasSaveUsed = saveUsed;
+
+        if(!changedDirection)
+        {
+            if (WillHit())
+            {
+                willCollide = true;
+                saveUsed = true;
+            }
+        }
+
+        changedDirection = false;
+
+        var reverseMod = willReverse ? 0.2f : 0f;
+        Invoke("StartMove", 0.2f + reverseMod);
+
+        if ((!willCollide || wasSaveUsed) && !CheckCollisions())
         {
             Move(transform.position + direction);
             moveDirection = direction;
+            saveUsed = false;
         }
+
+        
     }
 
     void AddTail()
@@ -110,6 +134,12 @@ public class Snake : SnakePart
         {
             immortal = true;
         }
+    }
+
+    bool WillHit()
+    {
+        var hits = Physics2D.OverlapCircleAll(transform.position + direction, 0.25f, collisionMask);
+        return hits.Any(h => h.gameObject.tag == "Wall");
     }
 
     bool CheckCollisions()
@@ -174,7 +204,6 @@ public class Snake : SnakePart
                 Tweener.Instance.MoveTo(camRig, h.transform.position, 0.3f, 0, TweenEasings.BounceEaseOut);
 			}
         }
-
 
         return returnValue;
     }
