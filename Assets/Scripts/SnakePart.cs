@@ -7,6 +7,7 @@ public class SnakePart : MonoBehaviour
 {
     public Transform mid;
     public int index;
+    public PartPool partPool;
 
     private SnakePart tail;
 
@@ -55,7 +56,12 @@ public class SnakePart : MonoBehaviour
         if (tail)
             tail.Chop(len);
 
+        if (len <= index)
+            tail = null;
+
         if (len < index)
-            Destroy(gameObject);
+        {
+            partPool.ReturnToPool(this);
+        }
     }
 }

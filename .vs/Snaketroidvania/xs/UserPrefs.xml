@@ -1,10 +1,12 @@
 ﻿<Properties StartupConfiguration="{42A82D3A-F6D8-2078-C6BC-37A35BF4C337}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Room.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/SnakePart.cs">
     <Files>
       <File FileName="Assets/Scripts/EffectCamera.cs" Line="47" Column="51" />
-      <File FileName="Assets/Scripts/Snake.cs" Line="107" Column="25" />
-      <File FileName="Assets/Scripts/SnakePart.cs" Line="31" Column="1" />
-      <File FileName="Assets/Scripts/Room.cs" Line="7" Column="18" />
+      <File FileName="Assets/Scripts/Snake.cs" Line="72" Column="22" />
+      <File FileName="Assets/Scripts/SnakePart.cs" Line="58" Column="1" />
+      <File FileName="Assets/Scripts/Room.cs" Line="2" Column="1" />
+      <File FileName="Assets/Scripts/NewClass.cs" Line="7" Column="1" />
+      <File FileName="Assets/Scripts/ObjectPool.cs" Line="16" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -12,7 +14,7 @@
           <Node name="Snaketroidvania" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="Room.cs" selected="True" />
+                <Node name="SnakePart.cs" selected="True" />
               </Node>
             </Node>
           </Node>

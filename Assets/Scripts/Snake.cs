@@ -23,6 +23,8 @@ public class Snake : SnakePart
     void Start()
     {
         index = 1;
+        partPool = new PartPool();
+        partPool.SetPrefab(tailPrefab);
 
         AddTail();
         AddTail();
@@ -64,7 +66,9 @@ public class Snake : SnakePart
     void AddTail()
     {
         length++;
-        var part = Instantiate(tailPrefab, transform.parent, true);
+        var part = partPool.Get();
+        part.transform.position = transform.position;
+        part.partPool = partPool;
         Attach(part);
 
         if(length == 8)

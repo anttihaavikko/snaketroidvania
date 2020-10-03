@@ -9,6 +9,11 @@ public abstract class ObjectPool<T> : MonoBehaviour where T : Component
 
     private Queue<T> pool;
 
+    public void SetPrefab(T fab)
+    {
+        prefab = fab;
+    }
+
     public T Get(bool activate = true)
     {
         if (pool == null)
