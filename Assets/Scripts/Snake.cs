@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class Snake : SnakePart
 {
@@ -14,12 +15,12 @@ public class Snake : SnakePart
 
     private Vector3 spawnPos;
     private Vector3 spawnDir;
-    private int allowedHits = 3;
+    private int allowedHits;
+    private int length = 1;
 
     // Start is called before the first frame update
     void Start()
     {
-        AddTail();
         AddTail();
         AddTail();
 
@@ -41,6 +42,11 @@ public class Snake : SnakePart
 
         if (dir != -direction)
             direction = dir;
+
+        if(Application.isEditor && Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadSceneAsync("Main");
+        }
     }
 
     void StartMove()
@@ -54,14 +60,23 @@ public class Snake : SnakePart
 
     void AddTail()
     {
+        length++;
         var part = Instantiate(tailPrefab, transform.parent, true);
         Attach(part);
+
+        if(length == 8)
+        {
+            allowedHits = 4;
+        }
     }
 
     bool CheckCollisions()
     {
+        var returnValue = false;
         var hits = Physics2D.OverlapCircleAll(transform.position, 0.25f, collisionMask);
         //print(string.Join(",", hits.Select(h => h.name)));
+
+        var insideWall = hits.Any(h => h.gameObject.tag == "Wall");
 
         foreach (var h in hits)
         {
@@ -69,25 +84,35 @@ public class Snake : SnakePart
             {
                 if(allowedHits > 0)
                 {
+                    //print("Inside wall, allowed " + allowedHits);
                     allowedHits--;
-                    return false;
                 }
-
-                Respawn();
-                return true;
+                else
+                {
+                    Respawn();
+                    returnValue = true;
+                }
             }
 
             if (h.tag == "Pickup")
             {
-                var x = Random.Range(-5, 6);
-                var y = Random.Range(-4, 5);
-                h.transform.position = new Vector3(x, y, 0);
-
                 AddTail();
+
+                if(length < 8)
+                {
+                    var x = Random.Range(-5, 6);
+                    var y = Random.Range(-4, 5);
+                    h.transform.position = new Vector3(x, y, 0);
+                }
+                else
+                {
+                    currentRoom.Grab(h.gameObject);
+                }
             }
 
-            if(h.tag == "Room" && (!currentRoom || h.transform != currentRoom.transform))
+            if(!insideWall && h.tag == "Room" && (!currentRoom || h.transform != currentRoom.transform))
 			{
+                //print("Activate room");
                 spawnPos = transform.position;
                 spawnDir = direction;
                 currentRoom = h.GetComponent<Room>();
@@ -96,7 +121,7 @@ public class Snake : SnakePart
         }
 
 
-        return false;
+        return returnValue;
     }
 
     void Respawn()
@@ -105,5 +130,6 @@ public class Snake : SnakePart
         Invoke("StartMove", 0.7f);
         direction = spawnDir;
         Reset(spawnPos);
+        currentRoom.Reset();
     }
 }
