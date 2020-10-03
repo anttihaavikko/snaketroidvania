@@ -7,6 +7,8 @@ public class Snake : SnakePart
 {
     public SnakePart tailPrefab;
     public LayerMask collisionMask;
+	public Transform camRig;
+    public Room currentRoom;
 
     private Vector3 direction = Vector3.right;
 
@@ -65,6 +67,12 @@ public class Snake : SnakePart
 
                 AddTail();
             }
+
+            if(h.tag == "Room" && (!currentRoom || h.transform != currentRoom.transform))
+			{
+                currentRoom = h.GetComponent<Room>();
+                Tweener.Instance.MoveTo(camRig, h.transform.position, 0.3f, 0, TweenEasings.BounceEaseOut);
+			}
         }
     }
 }

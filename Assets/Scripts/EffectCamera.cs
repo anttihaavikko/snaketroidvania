@@ -44,7 +44,7 @@ public class EffectCamera : MonoBehaviour {
             bulgeAmount = defaultLensDistortion = ld.intensity.value;
         }
 
-        originalPosition = transform.position;
+        originalPosition = transform.localPosition;
     }
 
 	void Update() {
@@ -76,12 +76,12 @@ public class EffectCamera : MonoBehaviour {
             shakeTime -= Time.deltaTime;
 
             var diff = new Vector3(Random.Range(-shakeAmount, shakeAmount) * mod, Random.Range(-shakeAmount, shakeAmount) * mod, 0);
-            transform.position += diff * 0.02f;
+            transform.localPosition += diff * 0.02f;
             transform.rotation = Quaternion.Euler(0, 0, Random.Range(-shakeAmount, shakeAmount) * mod);
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, originalPosition, Time.deltaTime * 20f);
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, originalPosition, Time.deltaTime * 20f);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.identity, Time.deltaTime);
         }
     }
