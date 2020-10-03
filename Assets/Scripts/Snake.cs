@@ -25,6 +25,8 @@ public class Snake : SnakePart
     private bool saveUsed;
     private Vector3 bufferDirection;
     private bool frozen;
+    private bool stopped;
+    private bool canStop;
 
     // Start is called before the first frame update
     void Start()
@@ -57,9 +59,26 @@ public class Snake : SnakePart
         else if (iy < -treshold) dir = Vector3.down;
 
         var inp = new Vector3(ix, iy, 0);
-        if (inp.magnitude < treshold)
+        var released = inp.magnitude < treshold;
+
+        if (released)
         {
             hasReleasedSinceReverse = true;
+            canStop = true;
+        }
+
+        if(!released && dir == direction && canStop)
+        {
+            CancelInvoke("StartMove");
+            stopped = true;
+            canStop = false;
+            return;
+        }
+
+        if(released && stopped)
+        {
+            stopped = false;
+            StartMove();
         }
 
         if (!hasReleasedSinceReverse)
@@ -138,6 +157,9 @@ public class Snake : SnakePart
 
         var reverseMod = willReverse ? 0.2f : 0f;
         Invoke("StartMove", 0.2f + reverseMod);
+
+        if (willCollide && immortal)
+            frozen = true;
 
         if ((!willCollide || wasSaveUsed) && !CheckCollisions())
         {
@@ -246,7 +268,7 @@ public class Snake : SnakePart
                     Invoke("StartMove", 0.7f);
                 }
 
-                spawnPos = SnakePart.RoundVector(transform.position);
+                spawnPos = RoundVector(transform.position);
 
                 spawnDir = direction;
                 spawnLength = length;
@@ -260,6 +282,8 @@ public class Snake : SnakePart
 
     void Respawn()
     {
+        frozen = false;
+        immortal = false;
         CancelInvoke("StartMove");
         Invoke("StartMove", 0.7f);
         direction = spawnDir;
@@ -267,5 +291,6 @@ public class Snake : SnakePart
         Chop(length);
         Reset(spawnPos);
         currentRoom.Reset();
+        RepositionMids();
     }
 }
