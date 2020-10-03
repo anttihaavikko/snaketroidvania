@@ -65,7 +65,7 @@ public class Snake : SnakePart
 
         if (dir != direction)
         {
-            if(changedDirection)
+            if(changedDirection && bufferDirection == Vector3.zero)
             {
                 bufferDirection = dir;
                 dir = direction;
@@ -128,7 +128,7 @@ public class Snake : SnakePart
 
         if(!changedDirection)
         {
-            if (WillHit(direction))
+            if (!immortal && WillHit(direction))
             {
                 willCollide = true;
                 saveUsed = true;
@@ -235,11 +235,8 @@ public class Snake : SnakePart
                     Invoke("StartMove", 0.7f);
                 }
 
-                spawnPos = new Vector3(
-                    Mathf.Round(transform.position.x),
-                    Mathf.Round(transform.position.y),
-                    Mathf.Round(transform.position.z)
-                );
+                spawnPos = SnakePart.RoundVector(transform.position);
+
                 spawnDir = direction;
                 spawnLength = length;
                 currentRoom = h.GetComponent<Room>();

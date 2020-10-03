@@ -17,7 +17,7 @@ public class SnakePart : MonoBehaviour
     public void Move(Vector3 pos)
     {
         moveDirection = pos - transform.position;
-        Tweener.Instance.MoveTo(transform, pos, 0.12f, 0, TweenEasings.LinearInterpolation);
+        Tweener.Instance.MoveTo(transform, RoundVector(pos), 0.12f, 0, TweenEasings.LinearInterpolation);
         //transform.position = pos;
 
         hasMoved = moveDirection.magnitude > 0.5f;
@@ -111,6 +111,7 @@ public class SnakePart : MonoBehaviour
             tail.ReverseOrder(this);
 
         tail = newTail;
+        hasMoved = false;
     }
 
     public void RepositionMids()
@@ -131,5 +132,14 @@ public class SnakePart : MonoBehaviour
         index = prev + 1;
         if (tail)
             tail.Reindex(index);
+    }
+
+    public static Vector3 RoundVector(Vector3 v)
+    {
+        return new Vector3(
+            Mathf.Round(v.x),
+            Mathf.Round(v.y),
+            Mathf.Round(v.z)
+        );
     }
 }
