@@ -59,7 +59,7 @@ public class Snake : SnakePart
         {
             if(h.tag == "Pickup")
             {
-                var x = Random.Range(-6, 7);
+                var x = Random.Range(-5, 6);
                 var y = Random.Range(-4, 5);
                 h.transform.position = new Vector3(x, y, 0);
 
