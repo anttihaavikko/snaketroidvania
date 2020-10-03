@@ -10,12 +10,12 @@ public class SnakePart : MonoBehaviour
     public PartPool partPool;
 
     protected SnakePart tail;
-    private Vector3 moveDirection;
+    protected Vector3 moveDirection;
 
     public void Move(Vector3 pos)
     {
         moveDirection = pos - transform.position;
-        Tweener.Instance.MoveTo(transform, pos, 0.1f, 0, TweenEasings.LinearInterpolation);
+        Tweener.Instance.MoveTo(transform, pos, 0.12f, 0, TweenEasings.LinearInterpolation);
         //transform.position = pos;
 
         if (tail)
@@ -24,7 +24,7 @@ public class SnakePart : MonoBehaviour
 
             if(mid)
             {
-                Tweener.Instance.MoveTo(mid, (pos + transform.position) * 0.5f, 0.1f, 0, TweenEasings.LinearInterpolation);
+                Tweener.Instance.MoveTo(mid, (transform.position + pos) * 0.5f, 0.12f, 0, TweenEasings.LinearInterpolation);
             }
         }
     }
@@ -52,6 +52,7 @@ public class SnakePart : MonoBehaviour
             tail.index = index + 1;
             mid.parent = transform.parent;
             part.moveDirection = moveDirection;
+            mid.gameObject.SetActive(true);
         }
     }
 
@@ -113,5 +114,12 @@ public class SnakePart : MonoBehaviour
         }
             
         mid.gameObject.SetActive(false);
+    }
+
+    public void Reindex(int prev)
+    {
+        index = prev + 1;
+        if (tail)
+            tail.Reindex(index);
     }
 }

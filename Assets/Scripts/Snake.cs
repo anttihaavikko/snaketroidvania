@@ -79,6 +79,7 @@ public class Snake : SnakePart
         oldTail.ReverseOrder(null);
         hasReleasedSinceReverse = false;
         RepositionMids();
+        Reindex(0);
     }
 
     void StartMove()
@@ -93,6 +94,7 @@ public class Snake : SnakePart
         if(!CheckCollisions())
         {
             Move(transform.position + direction);
+            moveDirection = direction;
         }
     }
 
