@@ -1,0 +1,29 @@
+﻿<Properties StartupConfiguration="{42A82D3A-F6D8-2078-C6BC-37A35BF4C337}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/SnakePart.cs">
+    <Files>
+      <File FileName="Assets/Scripts/EffectCamera.cs" Line="132" Column="2" />
+      <File FileName="Assets/Scripts/Snake.cs" Line="5" Column="31" />
+      <File FileName="Assets/Scripts/SnakePart.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Snaketroidvania" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="Scripts" expanded="True">
+                <Node name="SnakePart.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="5db0bd4b-519d-4fc6-bf1e-4f41b3840837" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
