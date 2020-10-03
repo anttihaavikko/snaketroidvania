@@ -23,6 +23,7 @@ public class Snake : SnakePart
     private bool hasReleasedSinceReverse = true;
     private bool changedDirection;
     private bool saveUsed;
+    private Vector3 bufferDirection;
 
     // Start is called before the first frame update
     void Start()
@@ -60,8 +61,28 @@ public class Snake : SnakePart
         if (!hasReleasedSinceReverse)
             return;
 
+        var useBuffer = true;
+
         if (dir != direction)
+        {
             changedDirection = true;
+
+            var willNow = WillHit(dir);
+            var willAfter = WillHit(direction + dir);
+
+            if(willNow && !willAfter)
+            {
+                bufferDirection = dir;
+                dir = direction;
+                useBuffer = false;
+            }
+        }
+
+        if(useBuffer && bufferDirection != Vector3.zero)
+        {
+            dir = bufferDirection;
+            bufferDirection = Vector3.zero;
+        }
 
         if (dir != -direction)
             direction = dir;
@@ -100,7 +121,7 @@ public class Snake : SnakePart
 
         if(!changedDirection)
         {
-            if (WillHit())
+            if (WillHit(direction))
             {
                 willCollide = true;
                 saveUsed = true;
@@ -136,9 +157,9 @@ public class Snake : SnakePart
         }
     }
 
-    bool WillHit()
+    bool WillHit(Vector3 dir)
     {
-        var hits = Physics2D.OverlapCircleAll(transform.position + direction, 0.25f, collisionMask);
+        var hits = Physics2D.OverlapCircleAll(transform.position + dir, 0.25f, collisionMask);
         return hits.Any(h => h.gameObject.tag == "Wall");
     }
 
