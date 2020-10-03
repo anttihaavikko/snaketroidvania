@@ -24,6 +24,7 @@ public class Snake : SnakePart
     private bool changedDirection;
     private bool saveUsed;
     private Vector3 bufferDirection;
+    private bool frozen;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +43,9 @@ public class Snake : SnakePart
     // Update is called once per frame
     void Update()
     {
+        if (frozen)
+            return;
+
         var treshold = 0.25f;
         var ix = Input.GetAxisRaw("Horizontal");
         var iy = Input.GetAxisRaw("Vertical");
@@ -117,22 +121,17 @@ public class Snake : SnakePart
 
     void StartMove()
     {
-        var willCollide = false;
-
         if (willReverse)
         {
             Reverse();
         }
 
         var wasSaveUsed = saveUsed;
+        var willCollide = WillHit(direction);
 
-        if(!changedDirection)
+        if (!changedDirection || willCollide)
         {
-            if (!immortal && WillHit(direction))
-            {
-                willCollide = true;
-                saveUsed = true;
-            }
+            saveUsed = true;
         }
 
         changedDirection = false;
@@ -142,6 +141,13 @@ public class Snake : SnakePart
 
         if ((!willCollide || wasSaveUsed) && !CheckCollisions())
         {
+            if(willCollide && !immortal)
+            {
+                Move(transform.position + direction * 0.25f);
+                Invoke("Respawn", 0.2f);
+                return;
+            }
+
             Move(transform.position + direction);
             moveDirection = direction;
             saveUsed = false;
@@ -199,6 +205,10 @@ public class Snake : SnakePart
                     Respawn();
                     returnValue = true;
                 }
+                else
+                {
+                    frozen = true;
+                }
             }
 
             if (h.tag == "Pickup")
@@ -228,6 +238,7 @@ public class Snake : SnakePart
 			{
                 if(currentRoom)
                 {
+                    frozen = false;
                     immortal = false;
                     currentRoom.MarkDone();
 
