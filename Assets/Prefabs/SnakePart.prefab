@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4155332820028206356}
   - component: {fileID: 4155332820028206357}
   - component: {fileID: 6772677973245863699}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SnakePart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mid: {fileID: 158564606621057702}
+  index: 0
+  partPool: {fileID: 0}
 --- !u!61 &6772677973245863699
 BoxCollider2D:
   m_ObjectHideFlags: 0

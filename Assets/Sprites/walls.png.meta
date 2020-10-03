@@ -55,7 +55,7 @@ TextureImporter:
     second: walls_16
   - first:
       213: 5808592622507235539
-    second: walls_17
+    second: door
   - first:
       213: -5199613361349611217
     second: walls_18
@@ -672,7 +672,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: walls_17
+      name: door
       rect:
         serializedVersion: 2
         x: 20

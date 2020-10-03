@@ -1,12 +1,13 @@
 ﻿<Properties StartupConfiguration="{42A82D3A-F6D8-2078-C6BC-37A35BF4C337}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/SnakePart.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/DoorSwitch.cs">
     <Files>
       <File FileName="Assets/Scripts/EffectCamera.cs" Line="47" Column="51" />
-      <File FileName="Assets/Scripts/Snake.cs" Line="72" Column="22" />
+      <File FileName="Assets/Scripts/Snake.cs" Line="128" Column="38" />
       <File FileName="Assets/Scripts/SnakePart.cs" Line="58" Column="1" />
-      <File FileName="Assets/Scripts/Room.cs" Line="2" Column="1" />
-      <File FileName="Assets/Scripts/NewClass.cs" Line="7" Column="1" />
-      <File FileName="Assets/Scripts/ObjectPool.cs" Line="16" Column="1" />
+      <File FileName="Assets/Scripts/Room.cs" />
+      <File FileName="Assets/Scripts/ObjectPool.cs" />
+      <File FileName="Assets/Scripts/DoorSwitch.cs" Line="7" Column="10" />
+      <File FileName="Assets/Scripts/Door.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -14,7 +15,7 @@
           <Node name="Snaketroidvania" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Scripts" expanded="True">
-                <Node name="SnakePart.cs" selected="True" />
+                <Node name="DoorSwitch.cs" selected="True" />
               </Node>
             </Node>
           </Node>
@@ -24,7 +25,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="d512a03c-6c77-4cf2-8002-9f65fbd17190" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6b006423-3625-4d11-8587-7c966ca16948" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

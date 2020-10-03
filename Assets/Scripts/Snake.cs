@@ -16,8 +16,9 @@ public class Snake : SnakePart
     private Vector3 spawnPos;
     private Vector3 spawnDir;
     private int spawnLength;
-    private int allowedHits;
+    private bool immortal;
     private int length = 1;
+    private List<DoorSwitch> switches;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,7 @@ public class Snake : SnakePart
         index = 1;
         partPool = new PartPool();
         partPool.SetPrefab(tailPrefab);
+        switches = new List<DoorSwitch>();
 
         AddTail();
         AddTail();
@@ -73,7 +75,7 @@ public class Snake : SnakePart
 
         if(length == 8)
         {
-            allowedHits = 4;
+            immortal = true;
         }
     }
 
@@ -83,18 +85,15 @@ public class Snake : SnakePart
         var hits = Physics2D.OverlapCircleAll(transform.position, 0.25f, collisionMask);
         //print(string.Join(",", hits.Select(h => h.name)));
 
+        switches.RemoveAll(ds => !ds.IsStillOn());
+
         var insideWall = hits.Any(h => h.gameObject.tag == "Wall");
 
         foreach (var h in hits)
         {
             if (h.tag == "Wall")
             {
-                if(allowedHits > 0)
-                {
-                    //print("Inside wall, allowed " + allowedHits);
-                    allowedHits--;
-                }
-                else
+                if(!immortal)
                 {
                     Respawn();
                     returnValue = true;
@@ -117,10 +116,23 @@ public class Snake : SnakePart
                 }
             }
 
-            if(!insideWall && h.tag == "Room" && (!currentRoom || h.transform != currentRoom.transform))
+            if (h.tag == "Switch")
+            {
+                var ds = h.GetComponent<DoorSwitch>();
+                switches.Add(ds);
+                ds.Toggle(true);
+            }
+
+            if (!insideWall && h.tag == "Room" && (!currentRoom || h.transform != currentRoom.transform))
 			{
                 if(currentRoom)
+                {
+                    immortal = false;
                     currentRoom.MarkDone();
+
+                    CancelInvoke("StartMove");
+                    Invoke("StartMove", 0.7f);
+                }
 
                 spawnPos = transform.position;
                 spawnDir = direction;

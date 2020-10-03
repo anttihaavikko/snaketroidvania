@@ -7,6 +7,7 @@ TagManager:
   - Pickup
   - Room
   - Wall
+  - Switch
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - 
   - Head
   - Letterbox
-  - 
+  - Tail
   - 
   - 
   - 
