@@ -13,6 +13,7 @@ public class Snake : SnakePart
     public MapDisplay map;
     public EffectCamera cam;
     public List<Appearer> messages;
+    public SpeechBubble bubble;
 
     private Vector3 direction = Vector3.right;
 
@@ -37,6 +38,7 @@ public class Snake : SnakePart
     private bool hasReverse;
     private bool hasStop;
     private bool hasMap;
+    private bool hasEnhancedMap;
     private bool hasFullMap;
 
     private bool hasRevealed;
@@ -72,6 +74,12 @@ public class Snake : SnakePart
     // Update is called once per frame
     void Update()
     {
+        if(bubble.IsShown() && bubble.done && Input.anyKeyDown)
+        {
+            HideMessage();
+            return;
+        }
+
         if (frozen)
             return;
 
@@ -190,6 +198,9 @@ public class Snake : SnakePart
         RepositionMids();
         Reindex(0);
 
+        CancelInvoke("StartMove");
+        Invoke("StartMove", 0.4f);
+
         AudioManager.Instance.PlayEffectAt(9, transform.position, 1f);
         AudioManager.Instance.PlayEffectAt(1, transform.position, 0.571f);
         AudioManager.Instance.PlayEffectAt(14, transform.position, 0.816f);
@@ -275,17 +286,31 @@ public class Snake : SnakePart
         {
             case Power.Stop:
                 hasStop = true;
+                ShowMessage("Aquired (patience)!\n\n(Hold forward) to get some thinking time...");
                 break;
             case Power.Reverse:
                 hasReverse = true;
+                ShowMessage("Aquired (reverse)!\n\nPress (back) to turn around...");
                 break;
             case Power.Map:
                 if (!hasMap)
+                {
                     hasMap = true;
+                    ShowMessage("Aquired (map)!\n\nPress (tab) or (m)\n to view...");
+                }
+                else if (!hasEnhancedMap)
+                {
+                    hasMap = true;
+                    ShowMessage("Aquired\n(enhanced map)!\n\nNow with collectibles...");
+                }
                 else
+                {
                     hasFullMap = true;
+                    ShowMessage("Aquired (full map)!\n\nGet out of the room to update...");
+                }
                 break;
             case Power.Teleport:
+                ShowMessage("Aquired special forbidden skill\n(wormhole)!");
                 hasTeleport = true;
                 break;
         }
@@ -304,6 +329,8 @@ public class Snake : SnakePart
             case Power.Map:
                 if (hasFullMap)
                     hasFullMap = false;
+                else if (hasEnhancedMap)
+                    hasEnhancedMap = false;
                 else
                     hasMap = false;
                 break;
@@ -498,6 +525,22 @@ public class Snake : SnakePart
             hasDied = true;
             messages[4].Show(true);
         }
+    }
+
+    void ShowMessage(string message)
+    {
+        CancelInvoke("StartMove");
+        stopped = true;
+        frozen = true;
+        bubble.ShowMessage(message);
+    }
+
+    void HideMessage()
+    {
+        Invoke("StartMove", 0.4f);
+        stopped = false;
+        frozen = false;
+        bubble.Hide();
     }
 
     void Burrow()
