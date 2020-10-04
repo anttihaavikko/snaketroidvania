@@ -8,6 +8,8 @@ public class Room : MonoBehaviour
     public GameObject hider, hinter;
     public List<Room> neighbours;
     public bool revealed;
+    public bool last;
+    public List<Appearer> endStuff;
 
     private List<Pickup> grabbed;
 
@@ -54,6 +56,15 @@ public class Room : MonoBehaviour
         if(nonRevealed.Any())
         {
             nonRevealed.ForEach(n => n.RevealAll());
+        }
+    }
+
+    public void ShowEnd()
+    {
+        if(last)
+        {
+            this.StartCoroutine(() => endStuff[0].Show(), 2f);
+            this.StartCoroutine(() => endStuff[1].Show(), 2.75f);
         }
     }
 }

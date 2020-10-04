@@ -49,6 +49,8 @@ public class Snake : SnakePart
     private bool yeahed;
     private bool hasDied;
 
+    private bool ended;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -495,7 +497,14 @@ public class Snake : SnakePart
                 currentRoom = h.GetComponent<Room>();
                 currentRoom.Reveal();
                 Tweener.Instance.MoveTo(camRig, h.transform.position, 0.3f, 0, TweenEasings.BounceEaseOut);
-			}
+
+                if (currentRoom.last)
+                {
+                    messages[5].Show(false);
+                    frozen = true;
+                    ended = true;
+                }
+            }
         }
 
         return returnValue;
@@ -514,6 +523,14 @@ public class Snake : SnakePart
         AudioManager.Instance.PlayEffectAt(21, transform.position, 1.494f);
         AudioManager.Instance.PlayEffectAt(18, transform.position, 1f);
         AudioManager.Instance.PlayEffectAt(13, transform.position, 1.249f);
+
+        if(ended)
+        {
+            CancelInvoke("StartMove");
+            currentRoom.ShowEnd();
+            gameObject.SetActive(false);
+            return;
+        }
 
         currentRoom.GetGrabbed().ForEach(p => CancelSkill(p.power));
         frozen = false;
