@@ -16,6 +16,7 @@ public class Snake : SnakePart
     public SpeechBubble bubble;
     public Camera mapCam;
     public LayerMask enhancedMapMask;
+    public List<Appearer> menuStuff;
 
     private Vector3 direction = Vector3.right;
 
@@ -51,6 +52,11 @@ public class Snake : SnakePart
 
     private bool ended;
 
+    private bool aiControl = true;
+    private int aiSteps = 3;
+
+    private bool canStart;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -74,11 +80,57 @@ public class Snake : SnakePart
         //    hasReverse = true;
         //    hasStop = true;
         //}
+
+        Invoke("EnableStart", 2f);
+    }
+
+    void EnableStart()
+    {
+        canStart = true;
+    }
+
+    void AiPickDirection()
+    {
+        if(!AiSafeMove(direction) || aiSteps <= 0)
+        {
+            changedDirection = true;
+            var left = Quaternion.Euler(0, 0, 90f) * direction;
+            var right = Quaternion.Euler(0, 0, -90f) * direction;
+            var roll = Random.value < 0.5f;
+            var first = roll ? left : right;
+            var second = roll ? right : left;
+            var best = AiSafeMove(first) ? first : second;
+            direction = best;
+            aiSteps = Random.Range(2, 10);
+        }
+
+        aiSteps--;
+    }
+
+    bool AiSafeMove(Vector3 dir)
+    {
+        var hits = Physics2D.OverlapCircleAll(transform.position + dir, 0.25f, collisionMask);
+        return !hits.Any(h => h.gameObject.tag == "Wall" || h.gameObject.tag == "Pickup");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(aiControl)
+        {
+            if(canStart && Input.anyKeyDown)
+            {
+                var idx = 0;
+                menuStuff.ForEach(ms => {
+                    this.StartCoroutine(ms.Hide, idx * 0.15f);
+                    idx++;
+                });
+                aiControl = false;
+            }
+
+            return;
+        }
+
         if(bubble.IsShown() && bubble.done && Input.anyKeyDown)
         {
             HideMessage();
@@ -215,6 +267,11 @@ public class Snake : SnakePart
 
     void StartMove()
     {
+        if(aiControl)
+        {
+            AiPickDirection();
+        }
+
         if (willReverse)
         {
             Reverse();

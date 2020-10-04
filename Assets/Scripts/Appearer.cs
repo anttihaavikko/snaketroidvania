@@ -30,7 +30,12 @@ public class Appearer : MonoBehaviour
         return soundOnZero ? Vector3.zero : transform.position;
     }
 
-    public void Show(bool autoHide = false)
+    public void Show()
+    {
+        Show(false);
+    }
+
+    public void Show(bool autoHide)
     {
         if(!silent)
         {
