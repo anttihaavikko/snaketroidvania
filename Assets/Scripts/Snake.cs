@@ -563,7 +563,7 @@ public class Snake : SnakePart
 
     void HideMessage()
     {
-        Invoke("StartMove", 0.4f);
+        Invoke("StartMove", 1f);
         stopped = false;
         frozen = false;
         bubble.Hide();

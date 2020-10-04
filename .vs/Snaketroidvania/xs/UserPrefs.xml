@@ -1,9 +1,9 @@
 ﻿<Properties StartupConfiguration="{42A82D3A-F6D8-2078-C6BC-37A35BF4C337}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/SpeechBubble.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Room.cs">
     <Files>
-      <File FileName="Assets/Scripts/Snake.cs" Line="503" Column="48" />
+      <File FileName="Assets/Scripts/Snake.cs" Line="530" Column="31" />
       <File FileName="Assets/Scripts/SnakePart.cs" Line="146" Column="25" />
-      <File FileName="Assets/Scripts/Room.cs" Line="50" Column="6" />
+      <File FileName="Assets/Scripts/Room.cs" Line="67" Column="62" />
       <File FileName="Assets/Scripts/DoorSwitch.cs" Line="9" Column="5" />
       <File FileName="Assets/Scripts/Door.cs" Line="47" Column="30" />
       <File FileName="Assets/Scripts/PartPool.cs" Line="4" Column="31" />
@@ -12,7 +12,7 @@
       <File FileName="Assets/Scripts/EffectCamera.cs" Line="118" Column="29" />
       <File FileName="Assets/Scripts/AudioManager.cs" Line="1" Column="1" />
       <File FileName="Assets/Scripts/Appearer.cs" Line="63" Column="87" />
-      <File FileName="Assets/Scripts/SpeechBubble.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/SpeechBubble.cs" Line="76" Column="18" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -21,7 +21,7 @@
             <Node name="Assets" expanded="True">
               <Node name="Editor" expanded="True" />
               <Node name="Scripts" expanded="True">
-                <Node name="SpeechBubble.cs" selected="True" />
+                <Node name="Room.cs" selected="True" />
               </Node>
             </Node>
           </Node>

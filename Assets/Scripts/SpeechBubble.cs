@@ -10,6 +10,7 @@ public class SpeechBubble : MonoBehaviour {
     public Vector3 hiddenSize;
     public Transform followTarget;
     public int soundOffset;
+    public Transform soundSource;
 
     private bool shown;
 	private string message = "";
@@ -83,7 +84,7 @@ public class SpeechBubble : MonoBehaviour {
 
         if (done) return;
 
-		if (Random.value < 0.8f) {
+		if (Random.value < 0.3f) {
 			return;
 		}
 
@@ -112,9 +113,9 @@ public class SpeechBubble : MonoBehaviour {
             SetText(msg);
 
             if (messagePos == 1 || letter == " " || letter == "." || letter == "!") {
-                AudioManager.Instance.PlayEffectAt(14, transform.position, 1.325f);
-                AudioManager.Instance.PlayEffectAt(15, transform.position, 1.245f);
-                AudioManager.Instance.PlayEffectAt(16, transform.position, 1.545f);
+                AudioManager.Instance.PlayEffectAt(9, soundSource.position, 0.743f);
+                AudioManager.Instance.PlayEffectAt(10, soundSource.position, 0.188f);
+                AudioManager.Instance.PlayEffectAt(16, soundSource.position, 1.445f);
             }
 
             if (messagePos >= message.Length) {

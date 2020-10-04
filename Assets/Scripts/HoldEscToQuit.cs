@@ -6,6 +6,7 @@ public class HoldEscToQuit : MonoBehaviour
 {
     public Vector3 hiddenSize = Vector3.zero;
     public float speed = 0.3f;
+    public Transform bar;
 
     private Vector3 targetSize;
     private float escHeldFor;
@@ -29,6 +30,10 @@ public class HoldEscToQuit : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.Escape))
         {
             escHeldFor = 0f;
+
+            if(bar) {
+				bar.localScale = Vector3.zero;
+            }
         }
 
         if (Input.GetKey(KeyCode.Escape))
@@ -36,6 +41,10 @@ public class HoldEscToQuit : MonoBehaviour
             escHeldFor += Time.deltaTime;
             CancelInvoke("HideText");
             Invoke("HideText", 2f);
+
+            if(bar) {
+            	bar.localScale = new Vector3(Mathf.Min(escHeldFor / 1.5f, 1f), 1f, 1f);
+            }
         }
 
         if(escHeldFor > 1.5f)
