@@ -12,6 +12,7 @@ public class Snake : SnakePart
     public Room currentRoom;
     public MapDisplay map;
     public EffectCamera cam;
+    public List<Appearer> messages;
 
     private Vector3 direction = Vector3.right;
 
@@ -40,6 +41,8 @@ public class Snake : SnakePart
 
     private bool hasRevealed;
     private bool startedMusic;
+    private bool yeahed;
+    private bool hasDied;
 
     // Start is called before the first frame update
     void Start()
@@ -56,14 +59,14 @@ public class Snake : SnakePart
 
         map.gameObject.SetActive(true);
 
-        if(Application.isEditor)
-        {
-            hasMap = true;
-            hasFullMap = true;
-            hasTeleport = true;
-            hasReverse = true;
-            hasStop = true;
-        }
+        //if(Application.isEditor)
+        //{
+        //    hasMap = true;
+        //    hasFullMap = true;
+        //    hasTeleport = true;
+        //    hasReverse = true;
+        //    hasStop = true;
+        //}
     }
 
     // Update is called once per frame
@@ -392,6 +395,15 @@ public class Snake : SnakePart
                 AudioManager.Instance.PlayEffectAt(26, transform.position, 1f * vol);
                 AudioManager.Instance.PlayEffectAt(22, transform.position, 1f * vol);
 
+                if (length == 5)
+                    messages[0].Show(true);
+
+                if (length == 7)
+                    messages[1].Show(true);
+
+                if (length == 8)
+                    messages[2].Show(true);
+
                 if (length < 8)
                 {
                     var x = Random.Range(-5, 6);
@@ -431,6 +443,12 @@ public class Snake : SnakePart
                     {
                         hasRevealed = true;
                         currentRoom.RevealAll();
+                    }
+
+                    if(!yeahed)
+                    {
+                        yeahed = true;
+                        messages[3].Show(true);
                     }
                 }
 
@@ -474,6 +492,12 @@ public class Snake : SnakePart
         RepositionMids();
 
         EffectManager.Instance.AddEffect(0, transform.position);
+
+        if (!hasDied)
+        {
+            hasDied = true;
+            messages[4].Show(true);
+        }
     }
 
     void Burrow()
