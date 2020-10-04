@@ -28,9 +28,16 @@ public class Snake : SnakePart
     private bool frozen;
     private bool stopped;
     private bool canStop;
-    private bool canTeleport = true;
     private bool showingMap;
     private bool paused;
+
+    private bool hasTeleport;
+    private bool hasReverse;
+    private bool hasStop;
+    private bool hasMap = true;
+    private bool hasFullMap = true;
+
+    private bool hasRevealed;
 
     // Start is called before the first frame update
     void Start()
@@ -52,7 +59,7 @@ public class Snake : SnakePart
         if (frozen)
             return;
 
-        if(Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.M))
+        if((Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.M)) && hasMap)
         {
             ToggleMap();
         }
@@ -76,7 +83,7 @@ public class Snake : SnakePart
             canStop = true;
         }
 
-        if(!released && dir == direction && canStop)
+        if(!released && dir == direction && canStop && hasStop)
         {
             CancelInvoke("StartMove");
             stopped = true;
@@ -125,7 +132,7 @@ public class Snake : SnakePart
 
         if (dir != -direction)
             direction = dir;
-        else
+        else if (hasReverse)
             willReverse = true;
 
         if (Application.isEditor && Input.GetKeyDown(KeyCode.R))
@@ -193,7 +200,7 @@ public class Snake : SnakePart
 
         if ((!willCollide || wasSaveUsed) && !CheckCollisions())
         {
-            if(willCollide && !immortal && !canTeleport)
+            if(willCollide && !immortal && !hasTeleport)
             {
                 Move(transform.position + direction * 0.25f);
                 Invoke("Respawn", 0.2f);
@@ -228,6 +235,50 @@ public class Snake : SnakePart
         return hits.Any(h => h.gameObject.tag == "Wall" || h.gameObject.tag == "Tail");
     }
 
+    void ApplySkill(Power skill)
+    {
+        switch(skill)
+        {
+            case Power.Stop:
+                hasStop = true;
+                break;
+            case Power.Reverse:
+                hasReverse = true;
+                break;
+            case Power.Map:
+                if (!hasMap)
+                    hasMap = true;
+                else
+                    hasFullMap = true;
+                break;
+            case Power.Teleport:
+                hasTeleport = true;
+                break;
+        }
+    }
+
+    void CancelSkill(Power skill)
+    {
+        switch (skill)
+        {
+            case Power.Stop:
+                hasStop = false;
+                break;
+            case Power.Reverse:
+                hasReverse = false;
+                break;
+            case Power.Map:
+                if (hasFullMap)
+                    hasFullMap = false;
+                else
+                    hasMap = false;
+                break;
+            case Power.Teleport:
+                hasTeleport = false;
+                break;
+        }
+    }
+
     bool CheckCollisions()
     {
         var returnValue = false;
@@ -245,7 +296,7 @@ public class Snake : SnakePart
                 var part = h.GetComponent<SnakePart>();
                 if(part.HasMoved())
                 {
-                    if(canTeleport)
+                    if(hasTeleport)
                     {
                         transform.position += direction * 1;
                     }
@@ -272,7 +323,9 @@ public class Snake : SnakePart
 
             if (h.tag == "Pickup")
             {
+                var pickup = h.GetComponent<Pickup>();
                 AddTail();
+                ApplySkill(pickup.power);
 
                 if(length < 8)
                 {
@@ -282,7 +335,7 @@ public class Snake : SnakePart
                 }
                 else
                 {
-                    currentRoom.Grab(h.gameObject);
+                    currentRoom.Grab(pickup);
                 }
             }
 
@@ -303,6 +356,13 @@ public class Snake : SnakePart
 
                     CancelInvoke("StartMove");
                     Invoke("StartMove", 0.7f);
+
+                    if(!hasRevealed && hasFullMap)
+                    {
+                        print("Reveal all!");
+                        hasRevealed = true;
+                        currentRoom.RevealAll();
+                    }
                 }
 
                 spawnPos = RoundVector(transform.position);
@@ -320,6 +380,7 @@ public class Snake : SnakePart
 
     void Respawn()
     {
+        currentRoom.GetGrabbed().ForEach(p => CancelSkill(p.power));
         frozen = false;
         immortal = false;
         CancelInvoke("StartMove");

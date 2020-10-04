@@ -8,7 +8,8 @@ public enum Power
     Map,
     Teleport,
     Reverse,
-    None
+    None,
+    Stop
 };
 
 public class Pickup : MonoBehaviour
