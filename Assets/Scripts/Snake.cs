@@ -39,6 +39,7 @@ public class Snake : SnakePart
     private bool hasFullMap;
 
     private bool hasRevealed;
+    private bool startedMusic;
 
     // Start is called before the first frame update
     void Start()
@@ -173,6 +174,10 @@ public class Snake : SnakePart
 
     void Reverse()
     {
+        AudioManager.Instance.PlayEffectAt(9, transform.position, 1f);
+        AudioManager.Instance.PlayEffectAt(1, transform.position, 0.571f);
+        AudioManager.Instance.PlayEffectAt(14, transform.position, 0.816f);
+
         direction = GetReverseDirection();
         transform.position = GetReverseSpot();
         willReverse = false;
@@ -193,6 +198,20 @@ public class Snake : SnakePart
 
         var wasSaveUsed = saveUsed;
         var willCollide = WillHit(direction);
+
+        if(changedDirection)
+        {
+            var vol = 0.4f;
+            AudioManager.Instance.PlayEffectAt(17, transform.position, 2f * vol);
+            AudioManager.Instance.PlayEffectAt(16, transform.position, 0.62f * vol);
+            AudioManager.Instance.PlayEffectAt(10, transform.position, 0.751f * vol);
+        }
+        else
+        {
+            var vol = 0.3f;
+            AudioManager.Instance.PlayEffectAt(8, transform.position, 2f * vol);
+            AudioManager.Instance.PlayEffectAt(4, transform.position, 0.171f * vol);
+        }
 
         if (!changedDirection || willCollide)
         {
@@ -220,8 +239,6 @@ public class Snake : SnakePart
             moveDirection = direction;
             saveUsed = false;
         }
-
-        
     }
 
     void AddTail()
@@ -308,6 +325,9 @@ public class Snake : SnakePart
                     if(hasTeleport)
                     {
                         transform.position += direction * 1;
+                        AudioManager.Instance.PlayEffectAt(9, transform.position, 1f);
+                        AudioManager.Instance.PlayEffectAt(1, transform.position, 0.571f);
+                        AudioManager.Instance.PlayEffectAt(11, transform.position, 0.8f);
                     }
                     else
                     {
@@ -342,6 +362,16 @@ public class Snake : SnakePart
 
                 cam.BaseEffect(0.1f);
 
+                var vol = 0.8f;
+                AudioManager.Instance.PlayEffectAt(8, transform.position, 2f * vol);
+                AudioManager.Instance.PlayEffectAt(17, transform.position, 2f * vol);
+                AudioManager.Instance.PlayEffectAt(21, transform.position, 0.743f * vol);
+                AudioManager.Instance.PlayEffectAt(23, transform.position, 0.506f * vol);
+                AudioManager.Instance.PlayEffectAt(31, transform.position, 1f * vol);
+                AudioManager.Instance.PlayEffectAt(29, transform.position, 1.273f * vol);
+                AudioManager.Instance.PlayEffectAt(26, transform.position, 1f * vol);
+                AudioManager.Instance.PlayEffectAt(22, transform.position, 1f * vol);
+
                 if (length < 8)
                 {
                     var x = Random.Range(-5, 6);
@@ -356,6 +386,11 @@ public class Snake : SnakePart
 
             if (h.tag == "Switch")
             {
+                var vol = 0.7f;
+                AudioManager.Instance.PlayEffectAt(7, transform.position, 1f * vol);
+                AudioManager.Instance.PlayEffectAt(5, transform.position, 1f * vol);
+                AudioManager.Instance.PlayEffectAt(9, transform.position, 1f * vol);
+
                 var ds = h.GetComponent<DoorSwitch>();
                 switches.Add(ds);
                 ds.Toggle(true);
@@ -399,6 +434,13 @@ public class Snake : SnakePart
         Explode();
         cam.BaseEffect(0.5f);
 
+        AudioManager.Instance.PlayEffectAt(2, transform.position, 1.216f);
+        AudioManager.Instance.PlayEffectAt(6, transform.position, 0.825f);
+        AudioManager.Instance.PlayEffectAt(15, transform.position, 0.694f);
+        AudioManager.Instance.PlayEffectAt(21, transform.position, 1.494f);
+        AudioManager.Instance.PlayEffectAt(18, transform.position, 1f);
+        AudioManager.Instance.PlayEffectAt(13, transform.position, 1.249f);
+
         currentRoom.GetGrabbed().ForEach(p => CancelSkill(p.power));
         frozen = false;
         immortal = false;
@@ -418,5 +460,16 @@ public class Snake : SnakePart
         EffectManager.Instance.AddEffect(0, transform.position);
         EffectManager.Instance.AddEffect(2, transform.position);
         EffectManager.Instance.AddEffect(3, transform.position);
+
+        AudioManager.Instance.PlayEffectAt(2, transform.position, 1.216f);
+        AudioManager.Instance.PlayEffectAt(6, transform.position, 0.825f);
+        AudioManager.Instance.PlayEffectAt(21, transform.position, 1.494f);
+        AudioManager.Instance.PlayEffectAt(18, transform.position, 1f);
+
+        if (!startedMusic)
+        {
+            startedMusic = true;
+            AudioManager.Instance.curMusic.Play();
+        }
     }
 }

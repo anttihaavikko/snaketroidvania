@@ -10,7 +10,7 @@ public class Door : MonoBehaviour
 
     private List<DoorSwitch> switches;
     private Vector3 closedPos;
-
+    private bool previousState;
 
     void Awake()
     {
@@ -36,5 +36,14 @@ public class Door : MonoBehaviour
         var open = switches.All(s => s.IsOn());
         var target = open ? closedPos + direction : closedPos;
         Tweener.Instance.MoveTo(transform, target, 0.2f, 0, TweenEasings.BounceEaseOut);
+
+        if(open != previousState)
+        {
+            AudioManager.Instance.PlayEffectAt(12, transform.position, 1.045f);
+            AudioManager.Instance.PlayEffectAt(9, transform.position, 1f);
+            AudioManager.Instance.PlayEffectAt(14, transform.position, 1f);
+        }
+
+        previousState = open;
     }
 }

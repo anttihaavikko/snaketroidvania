@@ -21,7 +21,7 @@ public class SoundDesigner : EditorWindow
 
     public void FindAudioManager()
     {
-        am = GameObject.Find("Audio Manager").GetComponent<AudioManager>();
+        am = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     void OnGUI()
