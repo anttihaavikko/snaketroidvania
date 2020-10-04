@@ -14,6 +14,8 @@ public class Snake : SnakePart
     public EffectCamera cam;
     public List<Appearer> messages;
     public SpeechBubble bubble;
+    public Camera mapCam;
+    public LayerMask enhancedMapMask;
 
     private Vector3 direction = Vector3.right;
 
@@ -42,6 +44,7 @@ public class Snake : SnakePart
     private bool hasFullMap;
 
     private bool hasRevealed;
+    private bool hasEnhanced;
     private bool startedMusic;
     private bool yeahed;
     private bool hasDied;
@@ -300,8 +303,8 @@ public class Snake : SnakePart
                 }
                 else if (!hasEnhancedMap)
                 {
-                    hasMap = true;
-                    ShowMessage("Aquired\n(enhanced map)!\n\nNow with collectibles...");
+                    hasEnhancedMap = true;
+                    ShowMessage("Aquired\n(enhanced map)!\n\nGet out of the room to update...");
                 }
                 else
                 {
@@ -470,6 +473,12 @@ public class Snake : SnakePart
                     {
                         hasRevealed = true;
                         currentRoom.RevealAll();
+                    }
+
+                    if(!hasEnhanced && hasEnhancedMap)
+                    {
+                        hasEnhanced = true;
+                        mapCam.cullingMask = enhancedMapMask;
                     }
 
                     if(!yeahed)
