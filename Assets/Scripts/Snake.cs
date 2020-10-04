@@ -177,10 +177,6 @@ public class Snake : SnakePart
 
     void Reverse()
     {
-        AudioManager.Instance.PlayEffectAt(9, transform.position, 1f);
-        AudioManager.Instance.PlayEffectAt(1, transform.position, 0.571f);
-        AudioManager.Instance.PlayEffectAt(14, transform.position, 0.816f);
-
         direction = GetReverseDirection();
         transform.position = GetReverseSpot();
         willReverse = false;
@@ -190,6 +186,12 @@ public class Snake : SnakePart
         hasReleasedSinceReverse = false;
         RepositionMids();
         Reindex(0);
+
+        AudioManager.Instance.PlayEffectAt(9, transform.position, 1f);
+        AudioManager.Instance.PlayEffectAt(1, transform.position, 0.571f);
+        AudioManager.Instance.PlayEffectAt(14, transform.position, 0.816f);
+
+        EffectManager.Instance.AddEffect(1, transform.position);
     }
 
     void StartMove()
@@ -338,10 +340,14 @@ public class Snake : SnakePart
                 {
                     if(hasTeleport)
                     {
+                        EffectManager.Instance.AddEffect(1, transform.position);
+
                         transform.position += direction * 1;
                         AudioManager.Instance.PlayEffectAt(9, transform.position, 1f);
                         AudioManager.Instance.PlayEffectAt(1, transform.position, 0.571f);
                         AudioManager.Instance.PlayEffectAt(11, transform.position, 0.8f);
+
+                        EffectManager.Instance.AddEffect(1, transform.position);
                     }
                     else
                     {
@@ -466,6 +472,8 @@ public class Snake : SnakePart
         Reset(spawnPos);
         currentRoom.Reset();
         RepositionMids();
+
+        EffectManager.Instance.AddEffect(0, transform.position);
     }
 
     void Burrow()
