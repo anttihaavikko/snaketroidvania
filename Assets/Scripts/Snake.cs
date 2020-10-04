@@ -11,6 +11,7 @@ public class Snake : SnakePart
 	public Transform camRig;
     public Room currentRoom;
     public MapDisplay map;
+    public EffectCamera cam;
 
     private Vector3 direction = Vector3.right;
 
@@ -339,6 +340,8 @@ public class Snake : SnakePart
                 EffectManager.Instance.AddEffect(1, transform.position);
                 EffectManager.Instance.AddEffect(3, transform.position);
 
+                cam.BaseEffect(0.1f);
+
                 if (length < 8)
                 {
                     var x = Random.Range(-5, 6);
@@ -394,6 +397,7 @@ public class Snake : SnakePart
         CancelInvoke("Respawn");
 
         Explode();
+        cam.BaseEffect(0.5f);
 
         currentRoom.GetGrabbed().ForEach(p => CancelSkill(p.power));
         frozen = false;
@@ -410,6 +414,7 @@ public class Snake : SnakePart
 
     void Burrow()
     {
+        cam.BaseEffect(0.5f);
         EffectManager.Instance.AddEffect(0, transform.position);
         EffectManager.Instance.AddEffect(2, transform.position);
         EffectManager.Instance.AddEffect(3, transform.position);

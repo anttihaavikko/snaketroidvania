@@ -114,8 +114,8 @@ public class EffectCamera : MonoBehaviour {
 
 	public void BaseEffect(float mod = 1f) {
         //impulseSource.GenerateImpulse(Vector3.one * mod * 1000f);
-        Shake(7f * mod, 1f * mod);
-        Chromate(2.5f * mod, 3f * mod);
+        Shake(2.5f * mod, 0.8f * mod);
+        Chromate(1f * mod, 1f * mod);
         Bulge(defaultLensDistortion * 2f * mod, 1f * mod);
         Decolor(0.5f * mod, 3f * mod);
 
