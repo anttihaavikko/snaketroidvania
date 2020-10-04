@@ -142,4 +142,15 @@ public class SnakePart : MonoBehaviour
             Mathf.Round(v.z)
         );
     }
+
+    public void Explode()
+    {
+        EffectManager.Instance.AddEffect(0, transform.position);
+        EffectManager.Instance.AddEffect(2, transform.position);
+        EffectManager.Instance.AddEffect(3, transform.position);
+        EffectManager.Instance.AddEffect(4, transform.position);
+
+        if (tail)
+            tail.Explode();
+    }
 }

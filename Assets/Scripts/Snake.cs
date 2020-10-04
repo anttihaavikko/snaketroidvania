@@ -51,6 +51,14 @@ public class Snake : SnakePart
         AddTail();
 
         Invoke("StartMove", 0.5f);
+
+        map.gameObject.SetActive(true);
+
+        if(Application.isEditor)
+        {
+            hasMap = true;
+            hasFullMap = true;
+        }
     }
 
     // Update is called once per frame
@@ -317,6 +325,7 @@ public class Snake : SnakePart
                 }
                 else
                 {
+                    Burrow();
                     frozen = true;
                 }
             }
@@ -327,7 +336,10 @@ public class Snake : SnakePart
                 AddTail();
                 ApplySkill(pickup.power);
 
-                if(length < 8)
+                EffectManager.Instance.AddEffect(1, transform.position);
+                EffectManager.Instance.AddEffect(3, transform.position);
+
+                if (length < 8)
                 {
                     var x = Random.Range(-5, 6);
                     var y = Random.Range(-4, 5);
@@ -359,7 +371,6 @@ public class Snake : SnakePart
 
                     if(!hasRevealed && hasFullMap)
                     {
-                        print("Reveal all!");
                         hasRevealed = true;
                         currentRoom.RevealAll();
                     }
@@ -380,6 +391,10 @@ public class Snake : SnakePart
 
     void Respawn()
     {
+        CancelInvoke("Respawn");
+
+        Explode();
+
         currentRoom.GetGrabbed().ForEach(p => CancelSkill(p.power));
         frozen = false;
         immortal = false;
@@ -391,5 +406,12 @@ public class Snake : SnakePart
         Reset(spawnPos);
         currentRoom.Reset();
         RepositionMids();
+    }
+
+    void Burrow()
+    {
+        EffectManager.Instance.AddEffect(0, transform.position);
+        EffectManager.Instance.AddEffect(2, transform.position);
+        EffectManager.Instance.AddEffect(3, transform.position);
     }
 }
