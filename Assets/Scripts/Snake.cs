@@ -60,6 +60,9 @@ public class Snake : SnakePart
         {
             hasMap = true;
             hasFullMap = true;
+            hasTeleport = true;
+            hasReverse = true;
+            hasStop = true;
         }
     }
 
@@ -307,6 +310,17 @@ public class Snake : SnakePart
 
     bool CheckCollisions()
     {
+        if(currentRoom)
+        {
+            var diff = currentRoom.transform.position - transform.position;
+
+            if(diff.magnitude > 20)
+            {
+                Respawn();
+                return true;
+            }
+        }
+
         var returnValue = false;
         var hits = Physics2D.OverlapCircleAll(transform.position, 0.25f, collisionMask);
         //print(string.Join(",", hits.Select(h => h.name)));
