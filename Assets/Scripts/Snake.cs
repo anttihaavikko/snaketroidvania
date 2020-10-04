@@ -484,6 +484,11 @@ public class Snake : SnakePart
                 AudioManager.Instance.PlayEffectAt(26, transform.position, 1f * vol);
                 AudioManager.Instance.PlayEffectAt(22, transform.position, 1f * vol);
 
+                if(pickup.help)
+                {
+                    pickup.help.Show();
+                }
+
                 if (length == 5)
                     messages[0].Show(true);
 
@@ -589,7 +594,13 @@ public class Snake : SnakePart
             return;
         }
 
-        currentRoom.GetGrabbed().ForEach(p => CancelSkill(p.power));
+        currentRoom.GetGrabbed().ForEach(p => {
+            CancelSkill(p.power);
+            if (p.help)
+            {
+                p.help.Hide();
+            }
+        });
         frozen = false;
         immortal = false;
         CancelInvoke("StartMove");

@@ -15,4 +15,5 @@ public enum Power
 public class Pickup : MonoBehaviour
 {
     public Power power = Power.Grow;
+    public Appearer help;
 }
