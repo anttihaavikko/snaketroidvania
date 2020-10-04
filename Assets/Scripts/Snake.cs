@@ -34,8 +34,8 @@ public class Snake : SnakePart
     private bool hasTeleport;
     private bool hasReverse;
     private bool hasStop;
-    private bool hasMap = true;
-    private bool hasFullMap = true;
+    private bool hasMap;
+    private bool hasFullMap;
 
     private bool hasRevealed;
 
