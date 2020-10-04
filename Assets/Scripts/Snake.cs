@@ -10,7 +10,7 @@ public class Snake : SnakePart
     public LayerMask collisionMask;
 	public Transform camRig;
     public Room currentRoom;
-    public GameObject map;
+    public MapDisplay map;
 
     private Vector3 direction = Vector3.right;
 
@@ -151,7 +151,7 @@ public class Snake : SnakePart
     void ToggleMap()
     {
         showingMap = !showingMap;
-        map.SetActive(showingMap);
+        map.Toggle(showingMap);
         TogglePause(showingMap);
     }
 
@@ -310,6 +310,7 @@ public class Snake : SnakePart
                 spawnDir = direction;
                 spawnLength = length;
                 currentRoom = h.GetComponent<Room>();
+                currentRoom.Reveal();
                 Tweener.Instance.MoveTo(camRig, h.transform.position, 0.3f, 0, TweenEasings.BounceEaseOut);
 			}
         }
