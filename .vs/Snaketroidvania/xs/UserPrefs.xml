@@ -1,20 +1,20 @@
 ﻿<Properties StartupConfiguration="{42A82D3A-F6D8-2078-C6BC-37A35BF4C337}|">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/SceneChanger/Blinders.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Room.cs">
     <Files>
       <File FileName="Assets/Scripts/Snake.cs" Line="128" Column="35" />
-      <File FileName="Assets/Scripts/SnakePart.cs" Line="146" Column="25" />
-      <File FileName="Assets/Scripts/Room.cs" Line="63" Column="6" />
-      <File FileName="Assets/Scripts/DoorSwitch.cs" Line="9" Column="5" />
-      <File FileName="Assets/Scripts/Door.cs" Line="47" Column="30" />
-      <File FileName="Assets/Scripts/PartPool.cs" Line="4" Column="31" />
-      <File FileName="Assets/Scripts/Pickup.cs" Line="10" Column="13" />
-      <File FileName="Assets/Scripts/MapDisplay.cs" Line="22" Column="1" />
-      <File FileName="Assets/Scripts/EffectCamera.cs" Line="118" Column="29" />
-      <File FileName="Assets/Scripts/AudioManager.cs" Line="1" Column="1" />
-      <File FileName="Assets/Scripts/Appearer.cs" Line="13" Column="32" />
-      <File FileName="Assets/Scripts/SpeechBubble.cs" Line="13" Column="34" />
-      <File FileName="Assets/SceneChanger/SceneChanger.cs" Line="77" Column="33" />
-      <File FileName="Assets/SceneChanger/Blinders.cs" />
+      <File FileName="Assets/Scripts/SnakePart.cs" />
+      <File FileName="Assets/Scripts/Room.cs" Line="13" Column="6" />
+      <File FileName="Assets/Scripts/DoorSwitch.cs" />
+      <File FileName="Assets/Scripts/Door.cs" />
+      <File FileName="Assets/Scripts/PartPool.cs" />
+      <File FileName="Assets/Scripts/Pickup.cs" />
+      <File FileName="Assets/Scripts/MapDisplay.cs" />
+      <File FileName="Assets/Scripts/EffectCamera.cs" />
+      <File FileName="Assets/Scripts/AudioManager.cs" />
+      <File FileName="Assets/Scripts/Appearer.cs" />
+      <File FileName="Assets/Scripts/SpeechBubble.cs" />
+      <File FileName="Assets/SceneChanger/SceneChanger.cs" />
+      <File FileName="Assets/SceneChanger/Blinders.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -22,10 +22,10 @@
           <Node name="Snaketroidvania" expanded="True">
             <Node name="Assets" expanded="True">
               <Node name="Editor" expanded="True" />
-              <Node name="SceneChanger" expanded="True">
-                <Node name="Blinders.cs" selected="True" />
+              <Node name="SceneChanger" expanded="True" />
+              <Node name="Scripts" expanded="True">
+                <Node name="Room.cs" selected="True" />
               </Node>
-              <Node name="Scripts" expanded="True" />
             </Node>
           </Node>
         </State>
@@ -34,7 +34,7 @@
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="6b006423-3625-4d11-8587-7c966ca16948" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="2f67cb31-577b-459a-93e4-6637f9780f94" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
