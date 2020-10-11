@@ -78,7 +78,7 @@ public class Snake : SnakePart
         {
             hasMap = true;
             hasFullMap = true;
-            hasTeleport = false;
+            hasTeleport = true;
             hasReverse = true;
             hasStop = false;
         }
@@ -287,6 +287,8 @@ public class Snake : SnakePart
 
         if (changedDirection)
         {
+            CancelInvoke("Respawn");
+
             var vol = 0.4f;
             AudioManager.Instance.PlayEffectAt(17, transform.position, 2f * vol);
             AudioManager.Instance.PlayEffectAt(16, transform.position, 0.62f * vol);
@@ -455,7 +457,7 @@ public class Snake : SnakePart
                     }
                     else
                     {
-                        print("Colliding with " + part.gameObject.name);
+                        //print("Colliding with " + part.gameObject.name);
                         Respawn();
                         returnValue = true;
                     }
