@@ -117,7 +117,14 @@ public class SnakePart : MonoBehaviour
     public void ReverseOrder(SnakePart newTail)
     {
         if (tail)
+        {
             tail.ReverseOrder(this);
+        }
+
+        if(newTail)
+        {
+            transform.position = newTail.transform.position;
+        }
 
         tail = newTail;
         moveCount = 0;

@@ -80,7 +80,7 @@ public class Snake : SnakePart
             hasFullMap = true;
             hasTeleport = false;
             hasReverse = true;
-            hasStop = true;
+            hasStop = false;
         }
 
         Invoke("EnableStart", 2f);
