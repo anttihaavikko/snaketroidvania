@@ -261,9 +261,6 @@ public class Snake : SnakePart
         RepositionMids();
         Reindex(0);
 
-        CancelInvoke("StartMove");
-        Invoke("StartMove", 0.4f);
-
         AudioManager.Instance.PlayEffectAt(9, transform.position, 1f);
         AudioManager.Instance.PlayEffectAt(1, transform.position, 0.571f);
         AudioManager.Instance.PlayEffectAt(14, transform.position, 0.816f);
@@ -281,6 +278,8 @@ public class Snake : SnakePart
         if (willReverse && canReverse)
         {
             Reverse();
+            Invoke("StartMove", 0.4f);
+            return;
         }
 
         var wasSaveUsed = saveUsed;
@@ -304,8 +303,7 @@ public class Snake : SnakePart
 
         changedDirection = false;
 
-        var reverseMod = willReverse ? 0.2f : 0f;
-        Invoke("StartMove", 0.2f + reverseMod);
+        Invoke("StartMove", 0.2f);
 
         frozen |= willCollide && immortal;
 
@@ -457,6 +455,7 @@ public class Snake : SnakePart
                     }
                     else
                     {
+                        print("Colliding with " + part.gameObject.name);
                         Respawn();
                         returnValue = true;
                     }

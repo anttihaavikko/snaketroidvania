@@ -111,7 +111,6 @@ public class SnakePart : MonoBehaviour
         if (tail)
             return tail.GetReverseDirection();
 
-        print("Get dir from " + gameObject.name);
         return -moveDirection;
     }
 
