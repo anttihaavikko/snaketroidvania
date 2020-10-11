@@ -36,6 +36,7 @@ public class Snake : SnakePart
     private bool canStop;
     private bool showingMap;
     private bool paused;
+    private bool canReverse;
 
     private bool hasTeleport;
     private bool hasReverse;
@@ -56,6 +57,7 @@ public class Snake : SnakePart
     private int aiSteps = 3;
 
     private bool canStart;
+    private bool justReversed;
 
     // Start is called before the first frame update
     void Start()
@@ -72,14 +74,14 @@ public class Snake : SnakePart
 
         map.gameObject.SetActive(true);
 
-        //if(Application.isEditor)
-        //{
-        //    hasMap = true;
-        //    hasFullMap = true;
-        //    hasTeleport = true;
-        //    hasReverse = true;
-        //    hasStop = true;
-        //}
+        if (Application.isEditor)
+        {
+            hasMap = true;
+            hasFullMap = true;
+            hasTeleport = false;
+            hasReverse = true;
+            hasStop = true;
+        }
 
         Invoke("EnableStart", 2f);
     }
@@ -213,8 +215,10 @@ public class Snake : SnakePart
 
         if (dir != -direction)
             direction = dir;
-        else if (hasReverse)
+        else if (hasReverse && dir != Vector3.zero)
+        {
             willReverse = true;
+        }
 
         if (Application.isEditor && Input.GetKeyDown(KeyCode.R))
         {
@@ -245,6 +249,8 @@ public class Snake : SnakePart
 
     void Reverse()
     {
+        justReversed = true;
+        canReverse = false;
         direction = GetReverseDirection();
         transform.position = GetReverseSpot();
         willReverse = false;
@@ -272,7 +278,7 @@ public class Snake : SnakePart
             AiPickDirection();
         }
 
-        if (willReverse)
+        if (willReverse && canReverse)
         {
             Reverse();
         }
@@ -280,7 +286,7 @@ public class Snake : SnakePart
         var wasSaveUsed = saveUsed;
         var willCollide = WillHit(direction);
 
-        if(changedDirection)
+        if (changedDirection)
         {
             var vol = 0.4f;
             AudioManager.Instance.PlayEffectAt(17, transform.position, 2f * vol);
@@ -294,24 +300,20 @@ public class Snake : SnakePart
             AudioManager.Instance.PlayEffectAt(4, transform.position, 0.171f * vol);
         }
 
-        if (!changedDirection || willCollide)
-        {
-            saveUsed = true;
-        }
+        saveUsed |= !changedDirection || willCollide;
 
         changedDirection = false;
 
         var reverseMod = willReverse ? 0.2f : 0f;
         Invoke("StartMove", 0.2f + reverseMod);
 
-        if (willCollide && immortal)
-            frozen = true;
+        frozen |= willCollide && immortal;
 
         if ((!willCollide || wasSaveUsed) && !CheckCollisions())
         {
             if(willCollide && !immortal && !hasTeleport)
             {
-                Move(transform.position + direction * 0.25f);
+                //Move(transform.position + direction * 0.25f);
                 Invoke("Respawn", 0.2f);
                 return;
             }
@@ -319,6 +321,7 @@ public class Snake : SnakePart
             Move(transform.position + direction);
             moveDirection = direction;
             saveUsed = false;
+            canReverse = true;
         }
     }
 
@@ -330,16 +333,27 @@ public class Snake : SnakePart
         part.partPool = partPool;
         Attach(part);
 
-        if(length == 8)
-        {
-            immortal = true;
-        }
+        immortal |= length == 8;
     }
 
     bool WillHit(Vector3 dir)
     {
         var hits = Physics2D.OverlapCircleAll(transform.position + dir, 0.25f, collisionMask);
-        return hits.Any(h => h.gameObject.tag == "Wall" || h.gameObject.tag == "Tail");
+        return hits.Any(h => IsDeadly(h.gameObject));
+    }
+
+    bool IsDeadly(GameObject go)
+    {
+        if (go.tag == "Wall")
+            return true;
+
+        if(go.tag == "Tail" && !justReversed)
+        {
+            var tail = go.GetComponent<SnakePart>();
+            return tail.HasMoved();
+        }
+
+        return false;
     }
 
     void ApplySkill(Power skill)
@@ -428,7 +442,7 @@ public class Snake : SnakePart
             if (h.tag == "Tail")
             {
                 var part = h.GetComponent<SnakePart>();
-                if(part.HasMoved())
+                if(part.HasMoved() && !justReversed)
                 {
                     if(hasTeleport)
                     {
@@ -568,6 +582,8 @@ public class Snake : SnakePart
                 }
             }
         }
+
+        justReversed = false;
 
         return returnValue;
     }

@@ -13,15 +13,19 @@ public class SnakePart : MonoBehaviour
     protected Vector3 moveDirection;
 
     //private Vector3 target, tailTarget;
-    private bool hasMoved;
+    protected int moveCount;
     private readonly float moveDuration = 0.12f;
 
     public Vector3 Move(Vector3 pos)
     {
-        moveDirection = pos - transform.position;
+        var dir = pos - transform.position;
+        if (dir != Vector3.zero)
+            moveDirection = dir;
+
         Tweener.Instance.MoveTo(transform, RoundVector(pos), moveDuration, 0, TweenEasings.LinearInterpolation);
 
-        hasMoved = moveDirection.magnitude > 0.5f;
+        if(moveDirection.magnitude > 0.5f)
+            moveCount++;
 
         if (tail)
         {
@@ -39,13 +43,13 @@ public class SnakePart : MonoBehaviour
 
     public bool HasMoved()
     {
-        return hasMoved;
+        return moveCount > 1;
     }
 
     public void Reset(Vector3 pos)
     {
         transform.position = pos;
-        hasMoved = false;
+        moveCount = 0;
 
         if (mid)
             mid.position = pos;
@@ -65,6 +69,7 @@ public class SnakePart : MonoBehaviour
             part.transform.position = transform.position;
             tail = part;
             tail.index = index + 1;
+            tail.gameObject.name = "Tail " + tail.index;
             mid.parent = transform.parent;
             part.moveDirection = moveDirection;
         }
@@ -106,6 +111,7 @@ public class SnakePart : MonoBehaviour
         if (tail)
             return tail.GetReverseDirection();
 
+        print("Get dir from " + gameObject.name);
         return -moveDirection;
     }
 
@@ -115,7 +121,7 @@ public class SnakePart : MonoBehaviour
             tail.ReverseOrder(this);
 
         tail = newTail;
-        hasMoved = false;
+        moveCount = 0;
     }
 
     public void RepositionMids()
